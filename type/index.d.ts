@@ -14,5 +14,5 @@ declare const useCanvasImage: (image: string | HTMLImageElement | typeof Image |
     canvasWidth: number;
     canvasHeight: number;
     max: number;
-}) => void) => Promise<HTMLImageElement>;
+}) => void, devicePixelRatio?: number) => Promise<HTMLImageElement>;
 export default useCanvasImage;

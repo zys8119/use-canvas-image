@@ -14,17 +14,17 @@ const useCanvasImage = (image:string | HTMLImageElement | typeof Image | HTMLCan
     canvasWidth:number
     canvasHeight:number
     max:number
-})=>void)=>{
+})=>void, devicePixelRatio:number = window.devicePixelRatio)=>{
     return new Promise<HTMLImageElement>((resolve, reject) => {
         try {
             const canvas = document.createElement('canvas')
             const ctx = canvas.getContext('2d')
             const img:any = typeof image === 'string' ? new Image() : image
             const drawImage = ()=>{
-                canvas.width = img.width * window.devicePixelRatio
-                canvas.height = img.height * window.devicePixelRatio
+                canvas.width = img.width * devicePixelRatio
+                canvas.height = img.height * devicePixelRatio
                 ctx.drawImage(img, 0,0)
-                const imgData = ctx.getImageData(0,0, img.width, img.height).data
+                const imgData = ctx.getImageData(0,0, canvas.width, canvas.height).data
                 const max = 4
                 for(let i = 0, lng = imgData.length; i < lng; i += max){
                     const r = imgData[i]
