@@ -40,7 +40,7 @@ const useCanvasImage = (image, callback, options) => {
           const rgba = `rgba(${r},${g},${b},${a})`;
           const index = i / max;
           const x = index % canvas.width;
-          const y = Number(index / canvas.width);
+          const y = Number((index / canvas.width).toFixed(0));
           if (typeof callback === "function") {
             callback == null ? void 0 : callback({
               r,
