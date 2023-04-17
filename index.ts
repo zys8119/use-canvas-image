@@ -63,7 +63,7 @@ const useCanvasImage = (image:string | HTMLImageElement | typeof Image | HTMLCan
                     const rgba = `rgba(${r},${g},${b},${a})`
                     const index = i / max
                     const x = index % canvas.width
-                    const y = Number((index / canvas.width))
+                    const y = Number((index / canvas.width).toFixed(0))
                     if(typeof callback === 'function'){
                         callback?.({r, g, b, a, rgba, index, x, y,
                             isStart: i === 0,
