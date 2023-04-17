@@ -53,7 +53,11 @@ const useCanvasImage = (image:string | HTMLImageElement | typeof Image | HTMLCan
                 canvas.width = img.width * devicePixelRatio
                 canvas.height = img.height * devicePixelRatio
                 ctx.drawImage(img, 0,0)
-                const imgData = ctx.getImageData(dataX || 0,dataY || 0, width || canvas.width, height || canvas.height).data
+                const sx = dataX || 0
+                const sy = dataY || 0
+                const sw = width || canvas.width
+                const sh = height || canvas.height
+                const imgData = ctx.getImageData(sx,sy, sw, sh).data
                 const max = 4
                 for(let i = 0, lng = imgData.length; i < lng; i += max){
                     const r = imgData[i]
@@ -62,10 +66,18 @@ const useCanvasImage = (image:string | HTMLImageElement | typeof Image | HTMLCan
                     const a = imgData[i+3]
                     const rgba = `rgba(${r},${g},${b},${a})`
                     const index = i / max
-                    const x = index % canvas.width
-                    const y = Number((index / canvas.width).toFixed(0))
+                    const x = index % sw + sx
+                    const y = Number((index / sw).toFixed(0)) + sy
                     if(typeof callback === 'function'){
-                        callback?.({r, g, b, a, rgba, index, x, y,
+                        callback?.({
+                            r,
+                            g,
+                            b,
+                            a,
+                            rgba,
+                            index,
+                            x,
+                            y,
                             isStart: i === 0,
                             lng,
                             key:i,
