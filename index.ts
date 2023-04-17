@@ -14,8 +14,9 @@ const unifyArgs = (options)=>{
         devicePixelRatio:window.devicePixelRatio
     }
     switch (Object.prototype.toString.call(options)) {
+        case '[object Undefined]':
         case '[object Number]':
-            result.devicePixelRatio = options
+            result.devicePixelRatio = options || window.devicePixelRatio
             break
         case '[object Object]':
             Object.assign(result, options)
