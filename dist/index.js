@@ -1,4 +1,26 @@
-const useCanvasImage = (image, callback, devicePixelRatio = window.devicePixelRatio) => {
+const unifyArgs = (options) => {
+  const result = {
+    x: 0,
+    y: 0,
+    width: null,
+    height: null,
+    devicePixelRatio: window.devicePixelRatio
+  };
+  switch (Object.prototype.toString.call(options)) {
+    case "[object Number]":
+      result.devicePixelRatio = options;
+      break;
+    case "[object Object]":
+      Object.assign(result, options);
+      break;
+    default:
+      throw "The options parameter is incorrect. The parameter must be number or object.";
+      break;
+  }
+  return result;
+};
+const useCanvasImage = (image, callback, options) => {
+  const { devicePixelRatio, x: dataX, y: dataY, width, height } = unifyArgs(options);
   return new Promise((resolve, reject) => {
     try {
       const canvas = document.createElement("canvas");
@@ -8,7 +30,7 @@ const useCanvasImage = (image, callback, devicePixelRatio = window.devicePixelRa
         canvas.width = img.width * devicePixelRatio;
         canvas.height = img.height * devicePixelRatio;
         ctx.drawImage(img, 0, 0);
-        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        const imgData = ctx.getImageData(dataX || 0, dataY || 0, width || canvas.width, height || canvas.height).data;
         const max = 4;
         for (let i = 0, lng = imgData.length; i < lng; i += max) {
           const r = imgData[i];

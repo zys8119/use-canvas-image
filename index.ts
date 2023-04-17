@@ -1,3 +1,31 @@
+export type Options =  number | {
+    devicePixelRatio?:number
+    x?:number
+    y?:number
+    width?:number
+    height?:number
+}
+const unifyArgs = (options)=>{
+    const result:Options = {
+        x:0,
+        y:0,
+        width:null,
+        height:null,
+        devicePixelRatio:window.devicePixelRatio
+    }
+    switch (Object.prototype.toString.call(options)) {
+        case '[object Number]':
+            result.devicePixelRatio = options
+            break
+        case '[object Object]':
+            Object.assign(result, options)
+            break
+        default:
+            throw 'The options parameter is incorrect. The parameter must be number or object.'
+            break
+    }
+    return result
+}
 const useCanvasImage = (image:string | HTMLImageElement | typeof Image | HTMLCanvasElement | CanvasImageSource, callback?:(info:{
     r:number
     g:number
@@ -14,7 +42,8 @@ const useCanvasImage = (image:string | HTMLImageElement | typeof Image | HTMLCan
     canvasWidth:number
     canvasHeight:number
     max:number
-})=>void, devicePixelRatio:number = window.devicePixelRatio)=>{
+})=>void, options?:Options)=>{
+    const {devicePixelRatio, x:dataX, y:dataY, width, height} = unifyArgs(options)
     return new Promise<HTMLImageElement>((resolve, reject) => {
         try {
             const canvas = document.createElement('canvas')
@@ -24,7 +53,7 @@ const useCanvasImage = (image:string | HTMLImageElement | typeof Image | HTMLCan
                 canvas.width = img.width * devicePixelRatio
                 canvas.height = img.height * devicePixelRatio
                 ctx.drawImage(img, 0,0)
-                const imgData = ctx.getImageData(0,0, canvas.width, canvas.height).data
+                const imgData = ctx.getImageData(dataX || 0,dataY || 0, width || canvas.width, height || canvas.height).data
                 const max = 4
                 for(let i = 0, lng = imgData.length; i < lng; i += max){
                     const r = imgData[i]

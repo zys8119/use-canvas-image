@@ -1,3 +1,10 @@
+export type Options = number | {
+    devicePixelRatio?: number;
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+};
 declare const useCanvasImage: (image: string | HTMLImageElement | typeof Image | HTMLCanvasElement | CanvasImageSource, callback?: (info: {
     r: number;
     g: number;
@@ -14,5 +21,5 @@ declare const useCanvasImage: (image: string | HTMLImageElement | typeof Image |
     canvasWidth: number;
     canvasHeight: number;
     max: number;
-}) => void, devicePixelRatio?: number) => Promise<HTMLImageElement>;
+}) => void, options?: Options) => Promise<HTMLImageElement>;
 export default useCanvasImage;
